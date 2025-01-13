@@ -5,14 +5,16 @@ const User = require("./models/user");
 const app = express();
 const port = 3000;
 
+app.use(express.json());
+
 app.post("/signup", async (req, res) => {
   const userObj = {
-    firstName: "Virat",
-    lastName: "Kohli",
-    emailId: "Virat@gmail.com",
-    password: "password",
-    age: 30,
-    gender: "Male",
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    emailId: req.body.emailId,
+    password: req.body.password,
+    age: req.body.age,
+    gender: req.body.gender,
   };
 
   // Creating an instance of User model
@@ -23,7 +25,7 @@ app.post("/signup", async (req, res) => {
 
     res.send("User created successfully");
   } catch (err) {
-    res.status(400).send("Error saving user" + err.message);
+    res.status(400).send("Error saving user: " + err.message);
   }
 });
 
