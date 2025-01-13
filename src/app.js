@@ -7,6 +7,7 @@ const connectDB = require("./config/database");
 const User = require("./models/user");
 
 const { validateSignupData, validateLoginData } = require("./utils/validation");
+const { adminAuth, userAuth } = require("./middlewares/auth");
 
 const app = express();
 const port = 3000;
@@ -29,10 +30,14 @@ app.post("/login", async (req, res) => {
         throw new Error("Invalid credentials!");
       }
       // Create JWT token
-      const token = await jwt.sign({ _id: user._id }, "Dev@Tinder$790");
+      const token = await jwt.sign({ _id: user._id }, "Dev@Tinder$790", {
+        expiresIn: "4h",
+      });
 
       // Add the token to cookie and send the response back
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000), // 8 hours
+      });
       res.send("User logged in successfully");
     } else {
       throw new Error("Invalid credentials!");
@@ -42,25 +47,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const cookies = req.cookies;
-
-    const { token } = cookies;
-
-    if (!token) {
-      throw new Error("Invalid Token");
-    }
-
-    const decoded = jwt.verify(token, "Dev@Tinder$790");
-
-    const { _id } = decoded;
-
-    const user = await User.findById(_id);
-
-    if (!user) {
-      throw new Error("User not found");
-    }
+    const user = req.user;
 
     return res.send(user);
   } catch (err) {

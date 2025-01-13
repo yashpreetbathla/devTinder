@@ -1,4 +1,7 @@
-export const adminAuth = (req, res, next) => {
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+
+const adminAuth = (req, res, next) => {
   let token = "xyz";
   const isTokenAuthenticated = token === "xyz";
   if (isTokenAuthenticated) {
@@ -8,12 +11,34 @@ export const adminAuth = (req, res, next) => {
   }
 };
 
-export const userAuth = (req, res, next) => {
-  let token = "abc";
-  const isTokenAuthenticated = token === "abc";
-  if (isTokenAuthenticated) {
+const userAuth = async (req, res, next) => {
+  try {
+    const cookies = req.cookies;
+
+    const { token } = cookies;
+
+    if (!token) {
+      throw new Error("Token is not valid");
+    }
+
+    const decodedObj = await jwt.verify(token, "Dev@Tinder$790");
+
+    const { _id } = decodedObj;
+
+    const user = await User.findById(_id);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Attach user data to req
+
+    req.user = user;
+
     next();
-  } else {
-    res.status(401).send("Not Authenticated User");
+  } catch (err) {
+    res.status(401).send("Error: " + err.message);
   }
 };
+
+module.exports = { adminAuth, userAuth };
