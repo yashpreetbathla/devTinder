@@ -73,7 +73,8 @@ app.patch("/user", async (req, res) => {
     const userObj = req.body;
     const user = await User.findOneAndUpdate(
       { emailId: req.body.emailId },
-      userObj
+      userObj,
+      { runValidators: true }
     );
     if (!user) {
       throw new Error("User not found");
