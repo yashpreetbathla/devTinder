@@ -70,9 +70,11 @@ app.delete("/user", async (req, res) => {
 
 app.patch("/user", async (req, res) => {
   try {
-    const userId = req.body.id;
     const userObj = req.body;
-    const user = await User.findByIdAndUpdate(userId, userObj);
+    const user = await User.findOneAndUpdate(
+      { emailId: req.body.emailId },
+      userObj
+    );
     if (!user) {
       throw new Error("User not found");
     }
