@@ -1,32 +1,40 @@
 const express = require("express");
-const { adminAuth, userAuth } = require("./middlewares/auth");
-const { errorMiddleware } = require("./middlewares/error");
+const connectDB = require("./config/database");
+const User = require("./models/user");
+
 const app = express();
 const port = 3000;
 
-app.use("/admin", adminAuth);
+app.post("/signup", async (req, res) => {
+  const userObj = {
+    firstName: "Virat",
+    lastName: "Kohli",
+    emailId: "Virat@gmail.com",
+    password: "password",
+    age: 30,
+    gender: "Male",
+  };
 
-app.get("/admin/getAllData", (req, res, next) => {
-  res.send("Admin Data Sent");
-});
+  // Creating an instance of User model
+  const user = new User(userObj);
 
-app.get("/user/login", (req, res) => {
-  res.send("User Login Data Sent");
-});
-
-app.use("/user", userAuth);
-
-app.get("/user", (req, res) => {
   try {
-    res.send("User Data Sent");
+    await user.save();
+
+    res.send("User created successfully");
   } catch (err) {
-    // res.status(500).send("Something went wrong");
-    throw new Error("Something went wrong"); // This will be caught by the errorMiddleware
+    res.status(400).send("Error saving user" + err.message);
   }
 });
 
-app.use("/", errorMiddleware);
+connectDB()
+  .then(() => {
+    console.log("Database connected");
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+    app.listen(port, () => {
+      console.log(`App listening on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Error connecting to the database: ", err);
+  });
