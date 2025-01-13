@@ -68,14 +68,31 @@ app.delete("/user", async (req, res) => {
   }
 });
 
-app.patch("/user", async (req, res) => {
+app.patch("/user/:userId", async (req, res) => {
   try {
+    const userId = req.params?.userId;
     const userObj = req.body;
-    const user = await User.findOneAndUpdate(
-      { emailId: req.body.emailId },
-      userObj,
-      { runValidators: true }
+
+    const ALLOWED_UPDATES = [
+      "photoUrl",
+      "about",
+      "skills",
+      "gender",
+      "age",
+      "password",
+    ];
+
+    const isUpdateAllowed = Object.keys(userObj).every((update) =>
+      ALLOWED_UPDATES.includes(update)
     );
+
+    if (!isUpdateAllowed) {
+      throw new Error("Field update not allowed");
+    }
+
+    const user = await User.findOneAndUpdate({ _id: userId }, userObj, {
+      runValidators: true,
+    });
     if (!user) {
       throw new Error("User not found");
     }
