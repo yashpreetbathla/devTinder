@@ -25,4 +25,26 @@ const validateLoginData = (req) => {
   }
 };
 
-module.exports = { validateSignupData, validateLoginData };
+const validateEditProfileData = (req) => {
+  const IS_ALLOWED_FIELDS = [
+    "firstName",
+    "lastName",
+    "skills",
+    "photoUrl",
+    "about",
+    "gender",
+    "age",
+  ];
+
+  const isValidFields = Object.keys(req.body).every((field) =>
+    IS_ALLOWED_FIELDS.includes(field)
+  );
+
+  return isValidFields;
+};
+
+module.exports = {
+  validateSignupData,
+  validateLoginData,
+  validateEditProfileData,
+};
