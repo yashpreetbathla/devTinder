@@ -77,7 +77,7 @@ requestRouter.post(
       if (!allowedStatus.includes(status)) {
         throw new Error("Invalid status type: " + status);
       }
-      console.log("test,", requestId, user._id);
+
       const connectionRequest = await ConnectionRequest.findOne({
         _id: requestId,
         toUserId: user._id,
