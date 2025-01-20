@@ -55,14 +55,14 @@ requestRouter.post(
 
       const data = await newConnectionRequest.save();
 
-      const emailRes = await sendEmail.run(
-        "A new friend request from" +
-          req.user.firstName +
-          " is " +
-          status +
-          " in " +
-          toUser.firstName
-      );
+      // const emailRes = await sendEmail.run(
+      //   "A new friend request from" +
+      //     req.user.firstName +
+      //     " is " +
+      //     status +
+      //     " in " +
+      //     toUser.firstName
+      // );
 
       res.json({
         message: "Connection request sent successfully",
