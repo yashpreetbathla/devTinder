@@ -5,6 +5,8 @@ const User = require("../models/user");
 
 const requestRouter = express.Router();
 
+const sendEmail = require("../utils/sendEmail");
+
 requestRouter.post(
   "/request/send/:status/:toUserId",
   userAuth,
@@ -52,6 +54,15 @@ requestRouter.post(
       });
 
       const data = await newConnectionRequest.save();
+
+      const emailRes = await sendEmail.run(
+        "A new friend request from" +
+          req.user.firstName +
+          " is " +
+          status +
+          " in " +
+          toUser.firstName
+      );
 
       res.json({
         message: "Connection request sent successfully",
