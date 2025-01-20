@@ -3,7 +3,10 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const connectDB = require("./config/database");
+
 require("dotenv").config();
+require("./utils/cronjob");
+
 const app = express();
 const port = 3000;
 
