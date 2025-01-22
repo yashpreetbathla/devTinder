@@ -1,5 +1,7 @@
 const socket = require("socket.io");
 const crypto = require("crypto");
+const { Chat } = require("../models/chat");
+const ConnectionRequestModel = require("../models/connectionRequest");
 
 const getSecretRoomId = ({ userId, targetUserId }) => {
   return crypto
@@ -23,12 +25,57 @@ const initializeSocket = (server) => {
       socket.join(room);
     });
 
-    socket.on("sendMessage", ({ userId, targetUserId, firstName, text }) => {
-      const room = getSecretRoomId({ userId, targetUserId });
+    socket.on(
+      "sendMessage",
+      async ({ userId, targetUserId, firstName, lastName, text }) => {
+        try {
+          const room = getSecretRoomId({ userId, targetUserId });
+          const isConnection = await ConnectionRequestModel.findOne({
+            $or: [
+              {
+                fromUserId: targetUserId,
+                toUserId: userId,
+                status: "accepted",
+              },
+              {
+                toUserId: targetUserId,
+                fromUserId: userId,
+                status: "accepted",
+              },
+            ],
+          });
 
-      // all the people in room will recieve
-      io.to(room).emit("messageRecieved", { firstName, userId, text });
-    });
+          console.log(isConnection);
+
+          if (!isConnection) {
+            throw new Error("Target user is not your connection");
+          }
+
+          let chat = await Chat.findOne({
+            participants: { $all: [userId, targetUserId] },
+          });
+
+          if (!chat) {
+            chat = new Chat({
+              participants: [userId, targetUserId],
+              messages: [],
+            });
+          }
+
+          chat.messages.push({
+            senderId: userId,
+            text,
+          });
+
+          await chat.save();
+
+          // all the people in room will recieve
+          io.to(room).emit("messageRecieved", { firstName, lastName, text });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    );
     socket.on("disconnect", () => {});
   });
 };
