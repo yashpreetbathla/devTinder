@@ -12,65 +12,85 @@ A modern, real-time developer networking platform that connects developers based
 - 🔄 Profile editing and password management
 - 📧 Email notifications for important updates
 
+## 📁 Project Structure
+
+```
+src/
+├── config/          # Configuration files
+├── controllers/     # API controllers
+├── middleware/      # Express middleware
+├── models/         # MongoDB models
+├── routes/         # API routes
+├── services/       # Business logic services
+├── utils/          # Utility functions
+└── app.js          # Main application file
+```
+
 ## 📱 Architecture
 
 ```mermaid
 graph TD
-    subgraph Client Layer
-        A[Client]
-        A1[Socket.IO Client]
-    end
+    A[Client] --> B[Express Server]
+    B --> C[Auth Service]
+    B --> D[Profile Service]
+    B --> E[Connection Service]
+    B --> F[Notification Service]
     
-    subgraph Server Layer
-        B[Express Server]
-        B1[Socket.IO Server]
-    end
-    
-    subgraph Services
-        C[Authentication Service]
-        D[Profile Service]
-        E[Connection Service]
-        F[Notification Service]
-    end
-    
-    subgraph Data Layer
-        I[MongoDB]
-        N[Email Service]
-    end
-    
-    %% Authentication Flow
     C --> G[JWT]
     C --> H[Password Hashing]
     
-    %% Profile Flow
-    D --> I
+    D --> I[MongoDB]
     D --> J[Profile Management]
     
-    %% Connection Flow
     E --> K[Connection Requests]
     E --> L[Real-time Updates]
     
-    %% Notification Flow
     F --> M[Socket.IO]
-    F --> N
+    F --> N[Email Service]
     
-    %% Real-time Communication
-    A1 -->|"Connection"| B1
-    B1 -->|"Events"| A1
-    B1 -->|"Events"| E
-    E -->|"Updates"| B1
-    
-    %% Styling
-    classDef client fill:#f9f,stroke:#333,stroke-width:4px
-    classDef server fill:#bbf,stroke:#333,stroke-width:4px
-    classDef service fill:#bfb,stroke:#333,stroke-width:4px
-    classDef data fill:#ffb,stroke:#333,stroke-width:4px
-    
-    class A,A1 client
-    class B,B1 server
-    class C,D,E,F service
-    class I,N data
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style B fill:#bbf,stroke:#333,stroke-width:4px
+    style C fill:#bfb,stroke:#333,stroke-width:4px
+    style D fill:#bfb,stroke:#333,stroke-width:4px
+    style E fill:#bfb,stroke:#333,stroke-width:4px
+    style F fill:#bfb,stroke:#333,stroke-width:4px
+    style G fill:#bfb,stroke:#333,stroke-width:4px
+    style H fill:#bfb,stroke:#333,stroke-width:4px
+    style I fill:#bfb,stroke:#333,stroke-width:4px
+    style J fill:#bfb,stroke:#333,stroke-width:4px
+    style K fill:#bfb,stroke:#333,stroke-width:4px
+    style L fill:#bfb,stroke:#333,stroke-width:4px
+    style M fill:#bfb,stroke:#333,stroke-width:4px
+    style N fill:#bfb,stroke:#333,stroke-width:4px
 ```
+
+### Architecture Overview
+
+DevTinder follows a clean, modular architecture with clear separation of concerns:
+
+1. **Client Layer**
+   - Handles user interface and real-time updates
+   - Communicates with Express Server via REST APIs
+   - Uses Socket.IO for real-time features
+
+2. **Express Server**
+   - Central hub for all services
+   - Handles API routing and business logic
+   - Manages real-time communication
+
+3. **Core Services**
+   - **Authentication Service**: User authentication and authorization
+   - **Profile Service**: User profiles and data management
+   - **Connection Service**: Connection requests and matching
+   - **Notification Service**: Real-time updates and email notifications
+
+4. **Data Layer**
+   - MongoDB: Stores user data, profiles, and connections
+   - JWT: Handles authentication tokens
+   - Socket.IO: Enables real-time communication
+   - AWS SES: Handles email notifications
+
+This architecture ensures scalability, maintainability, and real-time responsiveness while keeping the system modular and easy to extend.
 
 ### Architecture Overview
 
