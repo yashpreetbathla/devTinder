@@ -32,23 +32,50 @@ graph TD
     E --> L[Real-time Updates]
     
     F --> M[Socket.IO]
-    F --> N[Email Service (SES)]
+    F --> N[Email Service]
     
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#bfb,stroke:#333,stroke-width:2px
-    style D fill:#bfb,stroke:#333,stroke-width:2px
-    style E fill:#bfb,stroke:#333,stroke-width:2px
-    style F fill:#bfb,stroke:#333,stroke-width:2px
-    style G fill:#bfb,stroke:#333,stroke-width:2px
-    style H fill:#bfb,stroke:#333,stroke-width:2px
-    style I fill:#bfb,stroke:#333,stroke-width:2px
-    style J fill:#bfb,stroke:#333,stroke-width:2px
-    style K fill:#bfb,stroke:#333,stroke-width:2px
-    style L fill:#bfb,stroke:#333,stroke-width:2px
-    style M fill:#bfb,stroke:#333,stroke-width:2px
-    style N fill:#bfb,stroke:#333,stroke-width:2px
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style B fill:#bbf,stroke:#333,stroke-width:4px
+    style C fill:#bfb,stroke:#333,stroke-width:4px
+    style D fill:#bfb,stroke:#333,stroke-width:4px
+    style E fill:#bfb,stroke:#333,stroke-width:4px
+    style F fill:#bfb,stroke:#333,stroke-width:4px
+    style G fill:#bfb,stroke:#333,stroke-width:4px
+    style H fill:#bfb,stroke:#333,stroke-width:4px
+    style I fill:#bfb,stroke:#333,stroke-width:4px
+    style J fill:#bfb,stroke:#333,stroke-width:4px
+    style K fill:#bfb,stroke:#333,stroke-width:4px
+    style L fill:#bfb,stroke:#333,stroke-width:4px
+    style M fill:#bfb,stroke:#333,stroke-width:4px
+    style N fill:#bfb,stroke:#333,stroke-width:4px
 ```
+
+### Architecture Overview
+
+DevTinder follows a modular architecture with clear separation of concerns:
+
+1. **Client Layer**
+   - Handles user interface and real-time updates
+   - Communicates with Express Server via REST APIs
+
+2. **Express Server**
+   - Central hub for all services
+   - Handles API routing and business logic
+   - Manages real-time communication
+
+3. **Core Services**
+   - **Authentication Service**: Handles user authentication and authorization
+   - **Profile Service**: Manages user profiles and data
+   - **Connection Service**: Handles connection requests and matching
+   - **Notification Service**: Manages real-time updates and email notifications
+
+4. **Data Layer**
+   - MongoDB: Stores user data, profiles, and connections
+   - JWT: Handles authentication tokens
+   - Socket.IO: Enables real-time communication
+   - AWS SES: Handles email notifications
+
+This architecture ensures scalability, maintainability, and real-time responsiveness while keeping the system modular and easy to extend.
 
 ## 🛠️ Tech Stack
 
