@@ -40,6 +40,14 @@ graph TD
     style D fill:#bfb,stroke:#333,stroke-width:2px
     style E fill:#bfb,stroke:#333,stroke-width:2px
     style F fill:#bfb,stroke:#333,stroke-width:2px
+    style G fill:#bfb,stroke:#333,stroke-width:2px
+    style H fill:#bfb,stroke:#333,stroke-width:2px
+    style I fill:#bfb,stroke:#333,stroke-width:2px
+    style J fill:#bfb,stroke:#333,stroke-width:2px
+    style K fill:#bfb,stroke:#333,stroke-width:2px
+    style L fill:#bfb,stroke:#333,stroke-width:2px
+    style M fill:#bfb,stroke:#333,stroke-width:2px
+    style N fill:#bfb,stroke:#333,stroke-width:2px
 ```
 
 ## 🛠️ Tech Stack
@@ -73,24 +81,28 @@ graph TD
    npm run dev
    ```
 
-## 📖 API Endpoints
+## 📖 API Documentation
 
-### Authentication
-- POST `/auth/signup`
-- POST `/auth/login`
-- POST `/auth/logout`
+For detailed API documentation including request/response formats, headers, and parameters, check our [API Documentation](API_LIST.md).
 
-### Profile Management
-- GET `/profile/view`
-- PATCH `/profile/edit`
-- PATCH `/profile/password`
+### API Endpoints Overview
 
-### Connections
-- POST `/connections/request/send/:status/:userId`
-- POST `/connections/request/review/:status/:requestId`
-- GET `/user/connections`
-- GET `/user/requests/received`
-- GET `/user/feed`
+- **Authentication**
+  - POST `/auth/signup`
+  - POST `/auth/login`
+  - POST `/auth/logout`
+
+- **Profile Management**
+  - GET `/profile/view`
+  - PATCH `/profile/edit`
+  - PATCH `/profile/password`
+
+- **Connections**
+  - POST `/connections/request/send/:status/:userId`
+  - POST `/connections/request/review/:status/:requestId`
+  - GET `/user/connections`
+  - GET `/user/requests/received`
+  - GET `/user/feed`
 
 ## 📱 Real-time Features
 
