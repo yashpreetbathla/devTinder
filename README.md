@@ -16,38 +16,60 @@ A modern, real-time developer networking platform that connects developers based
 
 ```mermaid
 graph TD
-    A[Client] --> B[Express Server]
-    B --> C[Authentication Service]
-    B --> D[Profile Service]
-    B --> E[Connection Service]
-    B --> F[Notification Service]
+    subgraph Client Layer
+        A[Client]
+        A1[Socket.IO Client]
+    end
     
+    subgraph Server Layer
+        B[Express Server]
+        B1[Socket.IO Server]
+    end
+    
+    subgraph Services
+        C[Authentication Service]
+        D[Profile Service]
+        E[Connection Service]
+        F[Notification Service]
+    end
+    
+    subgraph Data Layer
+        I[MongoDB]
+        N[Email Service]
+    end
+    
+    %% Authentication Flow
     C --> G[JWT]
     C --> H[Password Hashing]
     
-    D --> I[MongoDB]
+    %% Profile Flow
+    D --> I
     D --> J[Profile Management]
     
+    %% Connection Flow
     E --> K[Connection Requests]
     E --> L[Real-time Updates]
     
+    %% Notification Flow
     F --> M[Socket.IO]
-    F --> N[Email Service]
+    F --> N
     
-    style A fill:#f9f,stroke:#333,stroke-width:4px
-    style B fill:#bbf,stroke:#333,stroke-width:4px
-    style C fill:#bfb,stroke:#333,stroke-width:4px
-    style D fill:#bfb,stroke:#333,stroke-width:4px
-    style E fill:#bfb,stroke:#333,stroke-width:4px
-    style F fill:#bfb,stroke:#333,stroke-width:4px
-    style G fill:#bfb,stroke:#333,stroke-width:4px
-    style H fill:#bfb,stroke:#333,stroke-width:4px
-    style I fill:#bfb,stroke:#333,stroke-width:4px
-    style J fill:#bfb,stroke:#333,stroke-width:4px
-    style K fill:#bfb,stroke:#333,stroke-width:4px
-    style L fill:#bfb,stroke:#333,stroke-width:4px
-    style M fill:#bfb,stroke:#333,stroke-width:4px
-    style N fill:#bfb,stroke:#333,stroke-width:4px
+    %% Real-time Communication
+    A1 -->|"Connection"| B1
+    B1 -->|"Events"| A1
+    B1 -->|"Events"| E
+    E -->|"Updates"| B1
+    
+    %% Styling
+    classDef client fill:#f9f,stroke:#333,stroke-width:4px
+    classDef server fill:#bbf,stroke:#333,stroke-width:4px
+    classDef service fill:#bfb,stroke:#333,stroke-width:4px
+    classDef data fill:#ffb,stroke:#333,stroke-width:4px
+    
+    class A,A1 client
+    class B,B1 server
+    class C,D,E,F service
+    class I,N data
 ```
 
 ### Architecture Overview
